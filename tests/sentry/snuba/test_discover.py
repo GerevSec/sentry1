@@ -634,9 +634,19 @@ class QueryIntegrationTest(SnubaTestCase, TestCase):
                 )
                 data = result["data"]
 
-                assert len(data) == expected_length
+def test_failure_count_function(self):
                 assert data[0]["failure_count"] == 2
                 assert data[1]["failure_count"] == 1
+
+    def test_apdex_function(self):
+        project = self.create_project()
+
+        ProjectTransactionThreshold.objects.create(
+            project=project,
+            organization=project.organization,
+            threshold=400,
+            metric=TransactionMetric.DURATION.value,
+        )
 
         ProjectTransactionThresholdOverride.objects.create(
             project=project,
